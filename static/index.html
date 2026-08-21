@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JobPilotAI — Tu rumbo profesional, sin fronteras</title>
+
+<meta name="description" content="Busca empleo internacional y remoto en un solo lugar. JobPilotAI analiza tu currículum con inteligencia artificial y te dice qué tan buen candidato eres para cada vacante.">
+<meta name="keywords" content="empleo internacional, trabajo remoto, buscar empleo, análisis de CV con IA, currículum, JobPilotAI">
+<meta name="author" content="JobPilotAI">
+<link rel="canonical" href="https://jobpilotai-f763.onrender.com/">
+
+<!-- Cómo se ve al compartir en redes sociales (WhatsApp, Facebook, LinkedIn, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="JobPilotAI — Tu rumbo profesional, sin fronteras">
+<meta property="og:description" content="Busca empleo internacional y remoto, y analiza tu CV con inteligencia artificial.">
+<meta property="og:url" content="https://jobpilotai-f763.onrender.com/">
+
+<!-- Cómo se ve al compartir en Twitter/X -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JobPilotAI — Tu rumbo profesional, sin fronteras">
+<meta name="twitter:description" content="Busca empleo internacional y remoto, y analiza tu CV con inteligencia artificial.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -277,29 +294,6 @@
   </div>
 </nav>
 
-<section class="hero">
-  <svg class="route-svg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
-    <path class="route-line" d="M40,220 C120,80 220,260 300,90 S440,40 470,60"/>
-    <circle class="route-dot" cx="40" cy="220" r="4"/>
-    <text class="route-label" x="50" y="224">SANTO DOMINGO</text>
-    <circle class="route-dot dim" cx="300" cy="90" r="3.5"/>
-    <text class="route-label" x="308" y="86">BERLIN</text>
-    <circle class="route-dot" cx="470" cy="60" r="4"/>
-    <text class="route-label" x="410" y="50">SINGAPORE</text>
-  </svg>
-  <div class="container">
-    <div class="hero-eyebrow">
-      <span class="mono-tag">● EN VIVO — BÚSQUEDA GLOBAL</span>
-    </div>
-    <h1>Tu rumbo profesional, <em>sin fronteras.</em></h1>
-    <p>JobPilotAI conecta tu perfil con oportunidades reales en cualquier parte del mundo, y usa inteligencia artificial para que tu currículum aterrice donde debe.</p>
-    <div class="hero-actions">
-      <button class="btn btn-gold" onclick="scrollToId('jobs')">Buscar empleos</button>
-      <button class="btn btn-ghost" onclick="scrollToId('cv')">Analizar mi CV</button>
-    </div>
-  </div>
-</section>
-
 <section id="auth">
   <div class="container">
     <div class="section-head" style="text-align:center;">
@@ -390,6 +384,30 @@
   </div>
 </section>
 
+<div id="mainAppContent" style="display:none;">
+<section class="hero">
+  <svg class="route-svg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+    <path class="route-line" d="M40,220 C120,80 220,260 300,90 S440,40 470,60"/>
+    <circle class="route-dot" cx="40" cy="220" r="4"/>
+    <text class="route-label" x="50" y="224">SANTO DOMINGO</text>
+    <circle class="route-dot dim" cx="300" cy="90" r="3.5"/>
+    <text class="route-label" x="308" y="86">BERLIN</text>
+    <circle class="route-dot" cx="470" cy="60" r="4"/>
+    <text class="route-label" x="410" y="50">SINGAPORE</text>
+  </svg>
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="mono-tag">● EN VIVO — BÚSQUEDA GLOBAL</span>
+    </div>
+    <h1>Tu rumbo profesional, <em>sin fronteras.</em></h1>
+    <p>JobPilotAI conecta tu perfil con oportunidades reales en cualquier parte del mundo, y usa inteligencia artificial para que tu currículum aterrice donde debe.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold" onclick="scrollToId('jobs')">Buscar empleos</button>
+      <button class="btn btn-ghost" onclick="scrollToId('cv')">Analizar mi CV</button>
+    </div>
+  </div>
+</section>
+
 <section id="jobs">
   <div class="container">
     <div class="section-head">
@@ -460,6 +478,8 @@
   </div>
 </section>
 
+</div>
+
 <footer>JobPilotAI — construido para llevarte más lejos.</footer>
 
 <div class="modal-overlay" id="jobModal" onclick="if(event.target===this) closeJobModal()">
@@ -476,6 +496,8 @@
 </div>
 
 <script>
+// Se adapta automáticamente: usa la misma dirección donde está corriendo la página
+// (funciona igual en tu computadora que en producción, sin tener que cambiar nada)
 const API_BASE = window.location.origin;
 let authToken = localStorage.getItem("jobpilotai_token") || null;
 let currentUser = JSON.parse(localStorage.getItem("jobpilotai_user") || "null");
@@ -509,6 +531,7 @@ function updateAuthUI(){
   const authSectionTitle = document.getElementById("authSectionTitle");
 
   if(authToken && currentUser){
+    document.getElementById("mainAppContent").style.display = "block";
     chip.style.display = "flex";
     loginBtn.style.display = "none";
     regBtn.style.display = "none";
@@ -539,6 +562,7 @@ function updateAuthUI(){
       planBadge.style.color = "var(--slate)";
     }
   } else {
+    document.getElementById("mainAppContent").style.display = "none";
     chip.style.display = "none";
     loginBtn.style.display = "inline-block";
     regBtn.style.display = "inline-block";
@@ -586,6 +610,7 @@ async function saveProfile(){
       })
     });
     const data = await res.json();
+    checkSessionExpired(res);
     if(!res.ok) throw new Error(data.detail || "No se pudo guardar el perfil.");
 
     currentUser = data;
@@ -606,6 +631,15 @@ function logout(){
   localStorage.removeItem("jobpilotai_token");
   localStorage.removeItem("jobpilotai_user");
   updateAuthUI();
+}
+
+// Detecta si la sesión expiró (401) y cierra sesión automáticamente con un aviso claro
+function checkSessionExpired(res){
+  if(res.status === 401 && authToken){
+    logout();
+    scrollToId("auth");
+    throw new Error("Tu sesión expiró. Por favor, inicia sesión de nuevo.");
+  }
 }
 
 async function fetchCurrentUser(){
@@ -662,9 +696,13 @@ async function handleRegister(event){
     });
     const data = await res.json();
     if(!res.ok) throw new Error(data.detail || "No se pudo crear la cuenta.");
+
+    const registeredEmail = document.getElementById("regEmail").value;
+    document.getElementById("registerForm").reset(); // limpia los campos usados
+
+    switchAuthTab("login"); // esto oculta el mensaje anterior, por eso mostramos el nuevo DESPUÉS
+    document.getElementById("loginEmail").value = registeredEmail;
     showAuthMsg("¡Cuenta creada! Ahora inicia sesión.", "success");
-    switchAuthTab("login");
-    document.getElementById("loginEmail").value = document.getElementById("regEmail").value;
   }catch(err){
     showAuthMsg(err.message.includes("fetch") ? "No se pudo conectar con el servidor. ¿Está corriendo uvicorn?" : err.message, "error");
   }finally{
@@ -777,6 +815,7 @@ async function matchCvWithCurrentJob(){
       headers:{ "Authorization": `Bearer ${authToken}` }
     });
     const data = await res.json();
+    checkSessionExpired(res);
     if(!res.ok) throw new Error(data.detail || "No se pudo comparar tu CV.");
 
     const pct = data.porcentaje_compatibilidad;
@@ -843,6 +882,7 @@ async function analyzeCV(){
       body: formData
     });
     const data = await res.json();
+    checkSessionExpired(res);
     if(!res.ok) throw new Error(data.detail || "No se pudo analizar el CV.");
 
     resultEl.style.display = "block";
@@ -911,6 +951,7 @@ async function upgradeToPremium(){
       headers:{ "Authorization": `Bearer ${authToken}` }
     });
     const data = await res.json();
+    checkSessionExpired(res);
     if(!res.ok) throw new Error(data.detail || "No se pudo iniciar el pago.");
     window.location.href = data.checkout_url;
   }catch(err){
