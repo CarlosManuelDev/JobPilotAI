@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobPilotAI — Tu rumbo profesional, sin fronteras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#0a1424;
+    --navy-900:#0f1b2d;
+    --navy-800:#16263d;
+    --navy-700:#1e3350;
+    --ivory:#eeece3;
+    --ivory-dim:#c7c9c2;
+    --slate:#7c8ca6;
+    --gold:#e8a33d;
+    --gold-dim:#c98a2c;
+    --teal:#4fb8a6;
+    --danger:#e0674f;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--navy-950);
+    color:var(--ivory);
+    font-family:'Space Grotesk',sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .label{
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .mono-tag{
+    font-family:'Space Grotesk',monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    color:var(--teal);
+    border:1px solid rgba(79,184,166,0.35);
+    padding:3px 8px;
+    border-radius:100px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    white-space:nowrap;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,20,36,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .nav-inner{
+    max-width:1080px;margin:0 auto;padding:14px 18px;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;flex-wrap:wrap;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;font-weight:600;font-size:17px;
+  }
+  .logo-mark{
+    width:28px;height:28px;border-radius:8px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--navy-950);font-size:14px;font-weight:700;
+  }
+  .nav-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  @media (max-width:480px){
+    .nav-right .btn{padding:8px 12px;font-size:13px;}
+    #userName{display:none;}
+  }
+  .btn{
+    padding:9px 18px;border-radius:100px;border:1px solid transparent;
+    font-size:14px;font-weight:600;transition:all .15s ease;
+  }
+  .btn-ghost{background:transparent;color:var(--ivory);border-color:rgba(255,255,255,0.16);}
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.4);}
+  .btn-gold{background:linear-gradient(135deg,#f0b455,var(--gold));color:var(--navy-950);box-shadow:0 4px 14px -4px rgba(232,163,61,0.5);}
+  .btn-gold:hover{box-shadow:0 6px 18px -4px rgba(232,163,61,0.7);transform:translateY(-1px);}
+  .btn-teal{background:linear-gradient(135deg,#63d4c0,var(--teal));color:var(--navy-950);box-shadow:0 4px 14px -4px rgba(79,184,166,0.5);}
+  .btn-teal:hover{box-shadow:0 6px 18px -4px rgba(79,184,166,0.7);transform:translateY(-1px);}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;}
+  #userChip{display:none;align-items:center;gap:10px;}
+  #userChip .avatar{
+    width:30px;height:30px;border-radius:50%;background:var(--navy-700);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);
+  }
+
+  /* HERO */
+  .hero{position:relative;padding:60px 0 50px;overflow:hidden;}
+  .container{max-width:1080px;margin:0 auto;padding:0 20px;}
+  @media (min-width:640px){
+    .hero{padding:90px 0 70px;}
+    .container{padding:0 28px;}
+  }
+  .hero-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .hero h1{font-size:clamp(32px,8vw,64px);line-height:1.06;margin:0 0 20px;max-width:780px;}
+  .hero h1 em{font-style:italic;color:var(--gold);}
+  .hero p{font-size:16px;color:var(--ivory-dim);max-width:560px;margin:0 0 30px;}
+  @media (min-width:640px){ .hero p{font-size:18px;} }
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .hero-actions .btn{width:100%;text-align:center;}
+  @media (min-width:480px){ .hero-actions .btn{width:auto;} }
+
+  .route-svg{display:none;}
+  @media (min-width:900px){
+    .route-svg{display:block;position:absolute;right:-60px;top:40px;width:520px;max-width:42vw;opacity:0.9;pointer-events:none;}
+  }
+  .route-line{stroke:var(--teal);stroke-width:1.4;fill:none;stroke-dasharray:6 7;}
+  @media (prefers-reduced-motion: no-preference){
+    .route-line{animation:dash 22s linear infinite;}
+  }
+  @keyframes dash{to{stroke-dashoffset:-260;}}
+  .route-dot{fill:var(--gold);}
+  .route-dot.dim{fill:var(--slate);}
+  .route-label{font-family:'Space Grotesk',monospace;font-size:9px;fill:var(--ivory-dim);letter-spacing:0.03em;}
+
+  /* SECTIONS */
+  section{padding:64px 0;border-top:1px solid rgba(255,255,255,0.06);}
+  .section-head{margin-bottom:34px;}
+  .section-head .label{margin-bottom:10px;display:block;}
+  .section-head h2{font-size:30px;margin:0;}
+
+  /* AUTH */
+  .auth-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:820px;margin:0 auto;background:var(--navy-900);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);overflow:hidden;}
+  @media (max-width:720px){.auth-wrap{grid-template-columns:1fr;}}
+  .auth-side{padding:38px;background:var(--navy-800);}
+  .auth-side h3{margin:0 0 10px;font-size:22px;}
+  .auth-side p{color:var(--ivory-dim);font-size:14px;margin:0;}
+  .auth-form{padding:38px;}
+  .auth-tabs{display:flex;gap:6px;margin-bottom:22px;background:var(--navy-950);padding:4px;border-radius:100px;}
+  .auth-tab{flex:1;text-align:center;padding:8px 0;border-radius:100px;font-size:13px;font-weight:600;color:var(--slate);border:none;background:transparent;}
+  .auth-tab.active{background:var(--navy-700);color:var(--ivory);}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;color:var(--slate);margin-bottom:6px;}
+  .field input,.field select{
+    width:100%;padding:11px 13px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);
+    background:var(--navy-950);color:var(--ivory);font-size:14px;font-family:inherit;
+  }
+  .field input:focus,.field select:focus{outline:2px solid var(--teal);outline-offset:1px;}
+  .form-msg{font-size:13px;padding:10px 12px;border-radius:8px;margin-bottom:14px;display:none;}
+  .form-msg.error{background:rgba(224,103,79,0.14);color:#f0a390;display:block;}
+  .form-msg.success{background:rgba(79,184,166,0.14);color:var(--teal);display:block;}
+
+  /* JOBS */
+  .search-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+  .search-bar input,.search-bar select{
+    padding:12px 14px;border-radius:9px;border:1px solid rgba(255,255,255,0.12);
+    background:var(--navy-900);color:var(--ivory);font-size:14px;font-family:inherit;
+  }
+  .search-bar input{flex:1;min-width:200px;}
+  .job-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .job-card{
+    background:linear-gradient(160deg,var(--navy-900) 0%,var(--navy-800) 130%);
+    border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);
+    padding:22px;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+    cursor:pointer;
+  }
+  .job-card:hover{
+    border-color:rgba(232,163,61,0.5);
+    transform:translateY(-3px);
+    box-shadow:0 14px 28px -10px rgba(0,0,0,0.5),0 0 0 1px rgba(232,163,61,0.15);
+  }
+  .job-card h4{margin:0 0 6px;font-size:17px;font-family:'Fraunces',serif;font-weight:600;}
+  .job-card .company{color:var(--ivory-dim);font-size:13px;margin-bottom:14px;}
+  .job-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+  .job-card .view-details{font-size:13px;color:var(--gold);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+  .job-card:hover .view-details{gap:8px;}
+  .view-details svg{transition:transform .18s ease;}
+  .empty-state{color:var(--slate);font-size:14px;padding:40px 0;text-align:center;}
+
+  /* CV */
+  .cv-panel{background:var(--navy-900);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:32px;max-width:640px;margin:0 auto;position:relative;}
+  .cv-panel::before,.cv-panel::after{
+    content:"";position:absolute;width:14px;height:14px;border-color:var(--teal);opacity:0.55;
+  }
+  .cv-panel::before{top:10px;left:10px;border-top:1.5px solid;border-left:1.5px solid;}
+  .cv-panel::after{bottom:10px;right:10px;border-bottom:1.5px solid;border-right:1.5px solid;}
+  .drop-zone{
+    border:1.5px dashed rgba(255,255,255,0.18);border-radius:12px;padding:36px 20px;text-align:center;
+    margin-bottom:18px;cursor:pointer;transition:border-color .15s ease;
+  }
+  .drop-zone:hover{border-color:var(--teal);}
+  .drop-zone.has-file{border-color:var(--gold);border-style:solid;}
+  #cvFileInput{display:none;}
+  .score-badge{
+    width:74px;height:74px;border-radius:50%;border:3px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;font-family:'Fraunces',serif;
+    margin:0 auto 18px;
+  }
+  .cv-result h4{font-size:14px;color:var(--gold);margin:20px 0 8px;text-transform:uppercase;letter-spacing:0.08em;font-family:'Space Grotesk',sans-serif;font-weight:600;}
+  .cv-result ul{margin:0;padding-left:18px;font-size:14px;color:var(--ivory-dim);}
+  .cv-result p{font-size:14px;color:var(--ivory-dim);margin:0;}
+
+  .icon-btn{width:15px;height:15px;flex-shrink:0;vertical-align:-3px;margin-right:2px;}
+  .btn{display:inline-flex;align-items:center;gap:2px;}
+  .locked-msg{text-align:center;color:var(--slate);font-size:14px;padding:30px;}
+
+  /* Detalle tipo HUD/instrumento en tarjetas: esquinas marcadas */
+  .job-card{position:relative;}
+  .job-card::before,.job-card::after{
+    content:"";position:absolute;width:10px;height:10px;
+    border-color:var(--gold);opacity:0;transition:opacity .18s ease;
+  }
+  .job-card::before{top:8px;left:8px;border-top:1.5px solid;border-left:1.5px solid;}
+  .job-card::after{bottom:8px;right:8px;border-bottom:1.5px solid;border-right:1.5px solid;}
+  .job-card:hover::before,.job-card:hover::after{opacity:0.7;}
+  @media (min-width:640px){
+    #pricing .container > div{grid-template-columns:1fr 1fr !important;}
+  }
+
+  /* MODAL DE DETALLE DE EMPLEO */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(5,10,18,0.72);backdrop-filter:blur(4px);
+    align-items:flex-start;justify-content:center;
+    padding:60px 20px;overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-card{
+    background:var(--navy-900);border:1px solid rgba(255,255,255,0.1);border-radius:18px;
+    max-width:620px;width:100%;padding:34px;position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+    animation:modalIn .2s ease;
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .modal-close{
+    position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:50%;
+    background:var(--navy-800);border:none;color:var(--ivory-dim);font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{background:var(--navy-700);color:var(--ivory);}
+  .modal-card h3{font-size:24px;margin:0 0 6px;padding-right:30px;}
+  .modal-card .company{color:var(--gold);font-size:14px;font-weight:600;margin-bottom:16px;}
+  .modal-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;}
+  .modal-card .description{
+    color:var(--ivory-dim);font-size:14px;line-height:1.7;white-space:pre-line;
+    max-height:340px;overflow-y:auto;padding-right:6px;margin-bottom:24px;
+  }
+  .modal-card .description::-webkit-scrollbar{width:5px;}
+  .modal-card .description::-webkit-scrollbar-thumb{background:var(--navy-700);border-radius:10px;}
+  footer{padding:30px 0;text-align:center;color:var(--slate);font-size:13px;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:var(--navy-950);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="logo-mark">JP</span> JobPilotAI</div>
+    <div class="nav-right">
+      <div id="userChip">
+        <span class="avatar" id="userInitial">U</span>
+        <span id="userName" style="font-size:14px;"></span>
+        <button class="btn btn-ghost" onclick="logout()" style="padding:6px 14px;">Salir</button>
+      </div>
+      <button class="btn btn-ghost" id="navLoginBtn" onclick="scrollToAuth('login')">Iniciar sesión</button>
+      <button class="btn btn-gold" id="navRegisterBtn" onclick="scrollToAuth('register')">Crear cuenta</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg class="route-svg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+    <path class="route-line" d="M40,220 C120,80 220,260 300,90 S440,40 470,60"/>
+    <circle class="route-dot" cx="40" cy="220" r="4"/>
+    <text class="route-label" x="50" y="224">SANTO DOMINGO</text>
+    <circle class="route-dot dim" cx="300" cy="90" r="3.5"/>
+    <text class="route-label" x="308" y="86">BERLIN</text>
+    <circle class="route-dot" cx="470" cy="60" r="4"/>
+    <text class="route-label" x="410" y="50">SINGAPORE</text>
+  </svg>
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="mono-tag">● EN VIVO — BÚSQUEDA GLOBAL</span>
+    </div>
+    <h1>Tu rumbo profesional, <em>sin fronteras.</em></h1>
+    <p>JobPilotAI conecta tu perfil con oportunidades reales en cualquier parte del mundo, y usa inteligencia artificial para que tu currículum aterrice donde debe.</p>
+    <div class="hero-actions">
+      <button class="btn btn-gold" onclick="scrollToId('jobs')">Buscar empleos</button>
+      <button class="btn btn-ghost" onclick="scrollToId('cv')">Analizar mi CV</button>
+    </div>
+  </div>
+</section>
+
+<section id="auth">
+  <div class="container">
+    <div class="section-head" style="text-align:center;">
+      <span class="label">Paso 1 · Coordenadas</span>
+      <h2 id="authSectionTitle">Crea tu cuenta o inicia sesión</h2>
+    </div>
+
+    <div id="authFormWrap" class="auth-wrap">
+      <div class="auth-side">
+        <h3>Bienvenido a bordo</h3>
+        <p>Registra tu perfil una vez y accede a búsqueda internacional de empleo y análisis de CV con IA. Sin costo para empezar.</p>
+      </div>
+      <div class="auth-form">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Iniciar sesión</button>
+          <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Crear cuenta</button>
+        </div>
+
+        <div id="authMsg" class="form-msg"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="field"><label>Correo</label><input type="email" id="loginEmail" required></div>
+          <div class="field"><label>Contraseña</label><input type="password" id="loginPassword" required></div>
+          <button type="submit" class="btn btn-gold" style="width:100%;" id="loginBtn">Entrar</button>
+        </form>
+
+        <form id="registerForm" onsubmit="handleRegister(event)" style="display:none;">
+          <div class="field"><label>Nombre completo</label><input type="text" id="regName" required></div>
+          <div class="field"><label>Correo</label><input type="email" id="regEmail" required></div>
+          <div class="field"><label>Contraseña (mín. 8 caracteres)</label><input type="password" id="regPassword" minlength="8" required></div>
+          <div class="field"><label>País</label><input type="text" id="regCountry" placeholder="Ej: República Dominicana"></div>
+          <button type="submit" class="btn btn-gold" style="width:100%;" id="registerBtn">Crear cuenta</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="authLoggedInMsg" style="display:none;max-width:640px;margin:0 auto;">
+      <div class="cv-panel" style="text-align:left;">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap;">
+          <div class="score-badge" style="border-color:var(--teal);width:64px;height:64px;font-size:22px;margin:0;" id="loggedInInitial">U</div>
+          <div style="flex:1;min-width:180px;">
+            <h3 style="margin:0 0 2px;font-size:20px;" id="loggedInGreeting">Usuario</h3>
+            <p style="margin:0;color:var(--slate);font-size:13px;" id="loggedInHeadline">Sin título profesional aún</p>
+          </div>
+          <span class="mono-tag" id="planBadge" style="border-color:var(--slate);">GRATIS</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:22px;">
+          <div style="background:var(--navy-950);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--gold);" id="statCvUsed">0</div>
+            <div style="font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:0.06em;">Análisis usados</div>
+          </div>
+          <div style="background:var(--navy-950);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-family:'Fraunces',serif;font-size:22px;color:var(--teal);" id="statCountry">—</div>
+            <div style="font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:0.06em;">País</div>
+          </div>
+          <div style="background:var(--navy-950);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-family:'Fraunces',serif;font-size:16px;padding-top:3px;" id="statRemote">—</div>
+            <div style="font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:0.06em;">Abierto a remoto</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+          <button class="btn btn-teal" onclick="scrollToId('jobs')"><svg class="icon-btn" viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14 14l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Explorar rutas</button>
+          <button class="btn btn-gold" onclick="scrollToId('cv')"><svg class="icon-btn" viewBox="0 0 20 20"><rect x="4" y="2" width="12" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 7h6M7 10h6M7 13h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Revisar instrumentos (CV)</button>
+          <button class="btn btn-ghost" onclick="toggleEditProfile()"><svg class="icon-btn" viewBox="0 0 20 20"><path d="M13 3l4 4-9.5 9.5L3 17l.5-4.5L13 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Actualizar bitácora</button>
+          <button class="btn btn-ghost" onclick="logout()">Desconectar</button>
+        </div>
+
+        <div id="editProfileForm" style="display:none;margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="field"><label>Nombre completo</label><input type="text" id="editFullName"></div>
+            <div class="field"><label>País</label><input type="text" id="editCountry"></div>
+          </div>
+          <div class="field"><label>Título profesional</label><input type="text" id="editHeadline" placeholder="Ej: Desarrollador Backend Senior"></div>
+          <div class="field"><label>Habilidades (separadas por coma)</label><input type="text" id="editSkills" placeholder="Python, SQL, Liderazgo de equipos"></div>
+          <div class="field">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" id="editRemote" style="width:auto;">
+              Abierto a trabajo remoto
+            </label>
+          </div>
+          <div id="editProfileMsg" class="form-msg"></div>
+          <button class="btn btn-gold" onclick="saveProfile()" id="saveProfileBtn">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="jobs">
+  <div class="container">
+    <div class="section-head">
+      <span class="label">Paso 2 · Ruta</span>
+      <h2>Busca oportunidades internacionales</h2>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="jobKeyword" placeholder="Ej: python developer, diseñador, marketing...">
+      <select id="jobRemote">
+        <option value="false">Todas las modalidades</option>
+        <option value="true">Solo remoto</option>
+      </select>
+      <button class="btn btn-teal" onclick="searchJobs()" id="searchBtn">Buscar</button>
+    </div>
+    <div id="jobResults" class="job-grid">
+      <div class="empty-state">Escribe una palabra clave y presiona "Buscar" para ver vacantes reales.</div>
+    </div>
+  </div>
+</section>
+
+<section id="cv">
+  <div class="container">
+    <div class="section-head" style="text-align:center;">
+      <span class="label">Paso 3 · Instrumentos</span>
+      <h2>Análisis de tu currículum con IA</h2>
+    </div>
+
+    <div class="cv-panel">
+      <div id="cvLocked" class="locked-msg">
+        Inicia sesión arriba para analizar tu currículum. ↑
+      </div>
+
+      <div id="cvUnlocked" style="display:none;">
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('cvFileInput').click()">
+          <div id="dropZoneText">📄 Haz clic para subir tu CV<br><span style="color:var(--slate);font-size:12px;">PDF, DOCX o TXT</span></div>
+        </div>
+        <input type="file" id="cvFileInput" accept=".pdf,.docx,.txt" onchange="handleFileSelect(event)">
+        <button class="btn btn-gold" style="width:100%;" id="analyzeBtn" onclick="analyzeCV()" disabled>Analizar CV</button>
+
+        <div id="cvResult" class="cv-result" style="display:none;margin-top:26px;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-head" style="text-align:center;">
+      <span class="label">Paso 4 · Ascenso</span>
+      <h2>Sube de nivel</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:20px;max-width:720px;margin:0 auto;">
+      <div class="cv-panel" style="text-align:left;">
+        <span class="mono-tag" style="margin-bottom:14px;">GRATIS</span>
+        <h3 class="serif" style="font-size:22px;margin:14px 0 6px;">Explorador</h3>
+        <p style="color:var(--ivory-dim);font-size:14px;margin:0 0 18px;">1 análisis de CV con IA · Búsqueda de empleo ilimitada</p>
+        <div style="font-family:'Fraunces',serif;font-size:30px;">$0</div>
+      </div>
+      <div class="cv-panel" style="text-align:left;border-color:var(--gold);">
+        <span class="mono-tag" style="border-color:var(--gold);color:var(--gold);margin-bottom:14px;">PREMIUM</span>
+        <h3 class="serif" style="font-size:22px;margin:14px 0 6px;">Piloto</h3>
+        <p style="color:var(--ivory-dim);font-size:14px;margin:0 0 18px;">Análisis de CV ilimitados · Prioridad en soporte</p>
+        <div style="font-family:'Fraunces',serif;font-size:30px;margin-bottom:18px;">$9<span style="font-size:14px;color:var(--slate);">/mes</span></div>
+        <button class="btn btn-gold" style="width:100%;" id="upgradeBtn" onclick="upgradeToPremium()">Actualizar a Premium</button>
+        <p id="premiumStatusMsg" style="font-size:12px;color:var(--teal);margin-top:10px;display:none;"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>JobPilotAI — construido para llevarte más lejos.</footer>
+
+<div class="modal-overlay" id="jobModal" onclick="if(event.target===this) closeJobModal()">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeJobModal()">✕</button>
+    <h3 id="modalTitle"></h3>
+    <div class="company" id="modalCompany"></div>
+    <div class="tags" id="modalTags"></div>
+    <div class="description" id="modalDescription"></div>
+    <div id="modalMatchResult" style="display:none;margin-bottom:18px;padding:16px;background:var(--navy-950);border-radius:10px;"></div>
+    <button id="modalMatchBtn" class="btn btn-teal" style="width:100%;margin-bottom:10px;" onclick="matchCvWithCurrentJob()">🎯 Comparar mi CV con esta vacante</button>
+    <a id="modalApplyLink" href="#" target="_blank" rel="noopener" class="btn btn-gold" style="width:100%;text-align:center;text-decoration:none;display:block;">Postularme en el sitio oficial →</a>
+  </div>
+</div>
+
+<script>
+const API_BASE = "http://127.0.0.1:8000";
+let authToken = localStorage.getItem("jobpilotai_token") || null;
+let currentUser = JSON.parse(localStorage.getItem("jobpilotai_user") || "null");
+let selectedFile = null;
+
+function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
+function scrollToAuth(tab){ switchAuthTab(tab); scrollToId("auth"); }
+
+function switchAuthTab(tab){
+  document.getElementById("tabLogin").classList.toggle("active", tab==="login");
+  document.getElementById("tabRegister").classList.toggle("active", tab==="register");
+  document.getElementById("loginForm").style.display = tab==="login" ? "block" : "none";
+  document.getElementById("registerForm").style.display = tab==="register" ? "block" : "none";
+  document.getElementById("authMsg").style.display = "none";
+}
+
+function showAuthMsg(text, type){
+  const el = document.getElementById("authMsg");
+  el.textContent = text;
+  el.className = "form-msg " + type;
+}
+
+function updateAuthUI(){
+  const chip = document.getElementById("userChip");
+  const loginBtn = document.getElementById("navLoginBtn");
+  const regBtn = document.getElementById("navRegisterBtn");
+  const cvLocked = document.getElementById("cvLocked");
+  const cvUnlocked = document.getElementById("cvUnlocked");
+  const authFormWrap = document.getElementById("authFormWrap");
+  const authLoggedInMsg = document.getElementById("authLoggedInMsg");
+  const authSectionTitle = document.getElementById("authSectionTitle");
+
+  if(authToken && currentUser){
+    chip.style.display = "flex";
+    loginBtn.style.display = "none";
+    regBtn.style.display = "none";
+    document.getElementById("userInitial").textContent = (currentUser.full_name || currentUser.email)[0].toUpperCase();
+    document.getElementById("userName").textContent = currentUser.full_name || currentUser.email;
+    cvLocked.style.display = "none";
+    cvUnlocked.style.display = "block";
+
+    // Ocultar formulario, mostrar panel de usuario
+    authFormWrap.style.display = "none";
+    authLoggedInMsg.style.display = "block";
+    authSectionTitle.textContent = "Tu bitácora de vuelo";
+    document.getElementById("loggedInInitial").textContent = (currentUser.full_name || currentUser.email)[0].toUpperCase();
+    document.getElementById("loggedInGreeting").textContent = currentUser.full_name || currentUser.email;
+    document.getElementById("loggedInHeadline").textContent = currentUser.headline || "Sin título profesional aún";
+    document.getElementById("statCvUsed").textContent = currentUser.cv_analyses_used ?? 0;
+    document.getElementById("statCountry").textContent = currentUser.country || "—";
+    document.getElementById("statRemote").textContent = currentUser.open_to_remote ? "Sí ✓" : "No";
+
+    const planBadge = document.getElementById("planBadge");
+    if(currentUser.is_premium){
+      planBadge.textContent = "PREMIUM";
+      planBadge.style.borderColor = "var(--gold)";
+      planBadge.style.color = "var(--gold)";
+    } else {
+      planBadge.textContent = "GRATIS";
+      planBadge.style.borderColor = "var(--slate)";
+      planBadge.style.color = "var(--slate)";
+    }
+  } else {
+    chip.style.display = "none";
+    loginBtn.style.display = "inline-block";
+    regBtn.style.display = "inline-block";
+    cvLocked.style.display = "block";
+    cvUnlocked.style.display = "none";
+
+    authFormWrap.style.display = "grid";
+    authLoggedInMsg.style.display = "none";
+    authSectionTitle.textContent = "Crea tu cuenta o inicia sesión";
+  }
+}
+
+function toggleEditProfile(){
+  const form = document.getElementById("editProfileForm");
+  const isOpen = form.style.display === "block";
+  form.style.display = isOpen ? "none" : "block";
+  if(!isOpen){
+    document.getElementById("editFullName").value = currentUser.full_name || "";
+    document.getElementById("editCountry").value = currentUser.country || "";
+    document.getElementById("editHeadline").value = currentUser.headline || "";
+    document.getElementById("editSkills").value = currentUser.skills || "";
+    document.getElementById("editRemote").checked = !!currentUser.open_to_remote;
+  }
+}
+
+async function saveProfile(){
+  const btn = document.getElementById("saveProfileBtn");
+  const msg = document.getElementById("editProfileMsg");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando...';
+  msg.style.display = "none";
+
+  try{
+    const res = await fetch(`${API_BASE}/api/auth/me`, {
+      method:"PATCH",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${authToken}`
+      },
+      body: JSON.stringify({
+        full_name: document.getElementById("editFullName").value,
+        country: document.getElementById("editCountry").value,
+        headline: document.getElementById("editHeadline").value,
+        skills: document.getElementById("editSkills").value,
+        open_to_remote: document.getElementById("editRemote").checked
+      })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo guardar el perfil.");
+
+    currentUser = data;
+    localStorage.setItem("jobpilotai_user", JSON.stringify(currentUser));
+    updateAuthUI();
+    toggleEditProfile();
+  }catch(err){
+    msg.className = "form-msg error";
+    msg.textContent = err.message;
+    msg.style.display = "block";
+  }finally{
+    btn.disabled = false; btn.textContent = "Guardar cambios";
+  }
+}
+
+function logout(){
+  authToken = null; currentUser = null;
+  localStorage.removeItem("jobpilotai_token");
+  localStorage.removeItem("jobpilotai_user");
+  updateAuthUI();
+}
+
+async function fetchCurrentUser(){
+  try{
+    const res = await fetch(`${API_BASE}/api/auth/me`, { headers:{ "Authorization": `Bearer ${authToken}` }});
+    if(!res.ok) throw new Error();
+    currentUser = await res.json();
+    localStorage.setItem("jobpilotai_user", JSON.stringify(currentUser));
+    updateAuthUI();
+  }catch(e){ logout(); }
+}
+
+async function handleLogin(event){
+  event.preventDefault();
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Entrando...';
+  try{
+    const body = new URLSearchParams();
+    body.append("username", document.getElementById("loginEmail").value);
+    body.append("password", document.getElementById("loginPassword").value);
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method:"POST",
+      headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+      body
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo iniciar sesión.");
+    authToken = data.access_token;
+    localStorage.setItem("jobpilotai_token", authToken);
+    await fetchCurrentUser();
+    showAuthMsg("¡Bienvenido de vuelta!", "success");
+  }catch(err){
+    showAuthMsg(err.message.includes("fetch") ? "No se pudo conectar con el servidor. ¿Está corriendo uvicorn?" : err.message, "error");
+  }finally{
+    btn.disabled = false; btn.textContent = "Entrar";
+  }
+}
+
+async function handleRegister(event){
+  event.preventDefault();
+  const btn = document.getElementById("registerBtn");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Creando...';
+  try{
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        email: document.getElementById("regEmail").value,
+        password: document.getElementById("regPassword").value,
+        full_name: document.getElementById("regName").value,
+        country: document.getElementById("regCountry").value,
+        preferred_language: "es"
+      })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo crear la cuenta.");
+    showAuthMsg("¡Cuenta creada! Ahora inicia sesión.", "success");
+    switchAuthTab("login");
+    document.getElementById("loginEmail").value = document.getElementById("regEmail").value;
+  }catch(err){
+    showAuthMsg(err.message.includes("fetch") ? "No se pudo conectar con el servidor. ¿Está corriendo uvicorn?" : err.message, "error");
+  }finally{
+    btn.disabled = false; btn.textContent = "Crear cuenta";
+  }
+}
+
+async function searchJobs(){
+  const resultsEl = document.getElementById("jobResults");
+  const btn = document.getElementById("searchBtn");
+  const keyword = document.getElementById("jobKeyword").value;
+  const remote = document.getElementById("jobRemote").value;
+
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Buscando...';
+  resultsEl.innerHTML = '<div class="empty-state">Buscando vacantes...</div>';
+
+  try{
+    const params = new URLSearchParams();
+    if(keyword) params.append("keyword", keyword);
+    if(remote === "true") params.append("remote_only", "true");
+    const res = await fetch(`${API_BASE}/api/jobs/search?${params.toString()}`);
+    if(!res.ok) throw new Error("Error al buscar empleos.");
+    const jobs = await res.json();
+
+    if(jobs.length === 0){
+      resultsEl.innerHTML = '<div class="empty-state">No encontramos resultados. Prueba con otra palabra clave.</div>';
+      return;
+    }
+
+    window._lastJobs = jobs; // guardamos para que el modal pueda leer los datos completos
+
+    resultsEl.innerHTML = jobs.map((job, i) => `
+      <div class="job-card" onclick="openJobModal(${i})">
+        <h4>${escapeHtml(job.title)}</h4>
+        <div class="company">${escapeHtml(job.company || "Empresa confidencial")}</div>
+        <div class="tags">
+          <span class="mono-tag">${job.is_remote ? "🌐 REMOTO" : (job.country || "N/A").toUpperCase()}</span>
+          <span class="mono-tag" style="border-color:rgba(232,163,61,0.35);color:var(--gold);">${job.source.toUpperCase()}</span>
+        </div>
+        <span class="view-details">Ver detalles <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4"/></svg></span>
+      </div>
+    `).join("");
+  }catch(err){
+    resultsEl.innerHTML = `<div class="empty-state">No se pudo conectar con el servidor. Verifica que uvicorn esté corriendo.</div>`;
+  }finally{
+    btn.disabled = false; btn.textContent = "Buscar";
+  }
+}
+
+function openJobModal(index){
+  const job = window._lastJobs[index];
+  if(!job) return;
+
+  window._currentModalJob = job;
+
+  document.getElementById("modalTitle").textContent = job.title;
+  document.getElementById("modalCompany").textContent = job.company || "Empresa confidencial";
+  document.getElementById("modalTags").innerHTML = `
+    <span class="mono-tag">${job.is_remote ? "🌐 REMOTO" : (job.country || "N/A").toUpperCase()}</span>
+    <span class="mono-tag" style="border-color:rgba(232,163,61,0.35);color:var(--gold);">${job.source.toUpperCase()}</span>
+    ${job.category ? `<span class="mono-tag">${escapeHtml(job.category)}</span>` : ""}
+  `;
+
+  const descEl = document.getElementById("modalDescription");
+  if(job.description){
+    // Quitamos etiquetas HTML que a veces vienen de las fuentes externas, dejando texto limpio
+    const tmp = document.createElement("div");
+    tmp.innerHTML = job.description;
+    descEl.textContent = tmp.textContent || tmp.innerText || "";
+  } else {
+    descEl.textContent = "Esta vacante no incluyó una descripción detallada.";
+  }
+
+  const applyLink = document.getElementById("modalApplyLink");
+  if(job.url){
+    applyLink.href = job.url;
+    applyLink.style.display = "block";
+  } else {
+    applyLink.style.display = "none";
+  }
+
+  // Reseteamos el resultado de comparación cada vez que se abre una vacante distinta
+  document.getElementById("modalMatchResult").style.display = "none";
+  const matchBtn = document.getElementById("modalMatchBtn");
+  matchBtn.style.display = authToken ? "block" : "none";
+  matchBtn.disabled = false;
+  matchBtn.textContent = "🎯 Comparar mi CV con esta vacante";
+
+  document.getElementById("jobModal").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+async function matchCvWithCurrentJob(){
+  const job = window._currentModalJob;
+  if(!job) return;
+
+  if(!authToken){
+    closeJobModal();
+    showAuthMsg("Inicia sesión y analiza tu CV primero para poder comparar.", "error");
+    scrollToId("auth");
+    return;
+  }
+
+  const btn = document.getElementById("modalMatchBtn");
+  const resultBox = document.getElementById("modalMatchResult");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Comparando con IA...';
+
+  try{
+    const res = await fetch(`${API_BASE}/api/cv/match/${job.id}`, {
+      headers:{ "Authorization": `Bearer ${authToken}` }
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo comparar tu CV.");
+
+    const pct = data.porcentaje_compatibilidad;
+    const color = pct >= 70 ? "var(--teal)" : pct >= 40 ? "var(--gold)" : "var(--danger)";
+
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+        <div style="font-family:'Fraunces',serif;font-size:32px;color:${color};">${pct}%</div>
+        <div style="font-size:13px;color:var(--ivory-dim);">${escapeHtml(data.veredicto)}</div>
+      </div>
+      <div style="font-size:12px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Coincidencias</div>
+      <ul style="margin:0 0 14px;padding-left:18px;font-size:13px;color:var(--ivory-dim);">
+        ${data.coincidencias.map(c=>`<li>${escapeHtml(c)}</li>`).join("")}
+      </ul>
+      <div style="font-size:12px;color:var(--danger);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Brechas</div>
+      <ul style="margin:0 0 14px;padding-left:18px;font-size:13px;color:var(--ivory-dim);">
+        ${data.brechas.map(c=>`<li>${escapeHtml(c)}</li>`).join("")}
+      </ul>
+      <div style="font-size:13px;color:var(--ivory-dim);border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;">
+        💡 ${escapeHtml(data.consejo_para_postularse)}
+      </div>
+    `;
+    btn.style.display = "none";
+  }catch(err){
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `<p style="color:var(--danger);margin:0;">${escapeHtml(err.message)}</p>`;
+    btn.disabled = false; btn.textContent = "🎯 Comparar mi CV con esta vacante";
+  }
+}
+
+function closeJobModal(){
+  document.getElementById("jobModal").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape") closeJobModal();
+});
+const dropZone = document.getElementById("dropZone");
+const dropZoneText = document.getElementById("dropZoneText");
+function handleFileSelect(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  selectedFile = file;
+  dropZone.classList.add("has-file");
+  dropZoneText.innerHTML = `✅ ${escapeHtml(file.name)}<br><span style="color:var(--slate);font-size:12px;">Clic para cambiar</span>`;
+  document.getElementById("analyzeBtn").disabled = false;
+}
+
+async function analyzeCV(){
+  if(!selectedFile) return;
+  const btn = document.getElementById("analyzeBtn");
+  const resultEl = document.getElementById("cvResult");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Analizando con IA...';
+  resultEl.style.display = "none";
+
+  try{
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    const res = await fetch(`${API_BASE}/api/cv/analyze`, {
+      method:"POST",
+      headers:{ "Authorization": `Bearer ${authToken}` },
+      body: formData
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo analizar el CV.");
+
+    resultEl.style.display = "block";
+    resultEl.innerHTML = `
+      <div style="display:flex;gap:14px;justify-content:center;margin-bottom:8px;">
+        <div style="text-align:center;">
+          <div class="score-badge">${data.puntuacion_general}/10</div>
+          <div style="font-size:11px;color:var(--slate);margin-top:4px;">GENERAL</div>
+        </div>
+        <div style="text-align:center;">
+          <div class="score-badge" style="border-color:var(--teal);">${data.puntuacion_ats}/10</div>
+          <div style="font-size:11px;color:var(--slate);margin-top:4px;">ATS</div>
+        </div>
+      </div>
+      <p style="text-align:center;"><span class="mono-tag" style="margin-bottom:8px;">${escapeHtml(data.nivel_experiencia_estimado)}</span></p>
+      <p style="text-align:center;">${escapeHtml(data.resumen)}</p>
+
+      <h4>Fortalezas</h4>
+      <ul>${data.fortalezas.map(f=>`<li>${escapeHtml(f)}</li>`).join("")}</ul>
+
+      <h4>Áreas de mejora</h4>
+      <ul>${data.areas_de_mejora.map(f=>`<li>${escapeHtml(f)}</li>`).join("")}</ul>
+
+      <h4>Palabras clave que te faltan (para ATS)</h4>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+        ${data.palabras_clave_faltantes.map(k=>`<span class="mono-tag" style="border-color:rgba(224,103,79,0.4);color:#f0a390;">${escapeHtml(k)}</span>`).join("")}
+      </div>
+
+      <h4>Puestos a los que deberías aplicar</h4>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+        ${data.titulos_de_puesto_sugeridos.map(t=>`<span class="mono-tag" style="border-color:rgba(232,163,61,0.4);color:var(--gold);">${escapeHtml(t)}</span>`).join("")}
+      </div>
+
+      <h4>Para postularte internacionalmente</h4>
+      <p>${escapeHtml(data.recomendaciones_internacionales)}</p>
+
+      <p style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);color:var(--teal);font-size:13px;">
+        💡 Ahora puedes comparar tu CV contra cualquier vacante — solo haz clic en "Ver detalles" en cualquier resultado de búsqueda y presiona "Comparar mi CV".
+      </p>
+    `;
+  }catch(err){
+    resultEl.style.display = "block";
+    resultEl.innerHTML = `<p style="color:var(--danger);">${escapeHtml(err.message)}</p>`;
+  }finally{
+    btn.disabled = false; btn.textContent = "Analizar CV";
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+async function upgradeToPremium(){
+  if(!authToken){
+    showAuthMsg("Inicia sesión primero para actualizar a Premium.", "error");
+    scrollToId("auth");
+    return;
+  }
+  const btn = document.getElementById("upgradeBtn");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Redirigiendo...';
+  try{
+    const res = await fetch(`${API_BASE}/api/payments/create-checkout-session`, {
+      method:"POST",
+      headers:{ "Authorization": `Bearer ${authToken}` }
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail || "No se pudo iniciar el pago.");
+    window.location.href = data.checkout_url;
+  }catch(err){
+    document.getElementById("premiumStatusMsg").style.display = "block";
+    document.getElementById("premiumStatusMsg").style.color = "var(--danger)";
+    document.getElementById("premiumStatusMsg").textContent = err.message;
+    btn.disabled = false; btn.textContent = "Actualizar a Premium";
+  }
+}
+
+async function checkPremiumStatus(){
+  if(!authToken) return;
+  try{
+    const res = await fetch(`${API_BASE}/api/payments/status`, {
+      headers:{ "Authorization": `Bearer ${authToken}` }
+    });
+    if(!res.ok) return;
+    const data = await res.json();
+    const msg = document.getElementById("premiumStatusMsg");
+    const btn = document.getElementById("upgradeBtn");
+    if(data.is_premium){
+      msg.style.display = "block"; msg.style.color = "var(--teal)";
+      msg.textContent = "✅ Ya tienes Premium activo.";
+      btn.disabled = true; btn.textContent = "Ya eres Premium";
+    } else {
+      msg.style.display = "block"; msg.style.color = "var(--ivory-dim)";
+      msg.textContent = `Análisis gratis usados: ${data.cv_analyses_used}/${data.free_analyses_limit}`;
+    }
+  }catch(e){}
+}
+
+// Si volvemos de Lemon Squeezy tras pagar, avisamos
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get("payment") === "success"){
+  window.addEventListener("DOMContentLoaded", () => {
+    alert("¡Pago exitoso! Tu cuenta Premium se activará en unos segundos.");
+  });
+}
+
+updateAuthUI();
+if(authToken){ fetchCurrentUser(); checkPremiumStatus(); }
+</script>
+</body>
+</html>
